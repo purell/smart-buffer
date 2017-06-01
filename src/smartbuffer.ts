@@ -690,6 +690,7 @@ class SmartBuffer {
         if (this.readOffset > this.length) {
             this.readOffset = this.length;
         }
+		return this;
     }	
 
     /**
