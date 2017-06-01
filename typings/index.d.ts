@@ -372,6 +372,14 @@ declare class SmartBuffer {
      */
     clear(): void;
     /**
+     * Remove data from buffer. The buffer internal storage size remains the same, however the data following 
+	 * the offset will be back shifted. Data length, write/read offset will be fix if it became outside of 
+	 * the new data range.
+     * @param offset { number } Offset where to start removing data.
+     * @param length { number } Length to remove.
+     */
+    remove(offset: number, length: number): this;
+    /**
      * Gets the remaining data left to be read from the SmartBuffer instance.
      *
      * @return { Number }
