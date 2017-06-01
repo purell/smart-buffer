@@ -660,6 +660,37 @@ class SmartBuffer {
         this.readOffset = 0;
         this.length = 0;
     }
+	
+    /**
+     * Remove data from buffer. The buffer internal storage size remains the same, however the data following 
+	 * the offset will be back shifted. Data length, write/read offset will be fix if it became outside of 
+	 * the new data range.
+     * @param offset { number } Offset where to start removing data.
+     * @param length { number } Length to remove.
+     */
+    remove(offset: number, length: number) {
+        offset = (offset || 0);
+        if (offset < 0 || offset > this.writeOffset) {
+            throw new Error("Offset position is beyond the bounds of the data.");
+        }
+        if (offset + length > this.length) {
+            throw new Error("Remove position is beyond the bounds of the data.");
+        }
+        var startingOffsetBackShift = offset + length;
+        var endingBackShift = this.length;
+        for (var i = startingOffsetBackShift, j = offset; i < endingBackShift; ++i, ++j) {
+            this.buff[j] = this.buff[i];
+        }
+        
+        this.length -= length;
+        
+        if (this.writeOffset > this.length) {
+            this.writeOffset = this.length;
+        }
+        if (this.readOffset > this.length) {
+            this.readOffset = this.length;
+        }
+    }	
 
     /**
      * Gets the remaining data left to be read from the SmartBuffer instance.
